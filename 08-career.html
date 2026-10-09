@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>职路护航 · 印痕</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%235FB98D'/%3E%3Cpath d='M9 20c4-7 10-9 15-6' stroke='%23FAF5EA' stroke-width='2.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+:root{--mint:#5FB98D;--deep:#3E8E6E;--light:#DCF0E5;--cream:#FAF5EA;--palegreen:#EAF2E9;--orange:#F0A35E;--cherry:#E4635F;--ink:#2C3A34;--white:#fff;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:"Noto Sans SC","Microsoft YaHei",-apple-system,"PingFang SC",sans-serif;color:var(--ink);background:var(--cream);}
+.site-nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:12px 26px;background:rgba(250,245,234,.95);backdrop-filter:blur(8px);box-shadow:0 2px 14px rgba(46,84,64,.08);}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
+.logo svg{width:32px;height:32px;}
+.logo .logo-txt{font-family:"ZCOOL KuaiLe","YouYuan","幼圆",sans-serif;font-size:25px;color:var(--deep);letter-spacing:2px;}
+.nav-links{display:flex;align-items:center;gap:4px;flex-wrap:wrap;}
+.nav-links a{color:var(--ink);text-decoration:none;font-size:15px;padding:8px 13px;border-radius:22px;transition:.22s;white-space:nowrap;}
+.nav-links a:hover{background:var(--light);color:var(--deep);}
+.nav-links a.active{background:var(--mint);color:#fff;}
+.dropdown{position:relative;}
+.dropdown-menu{display:none;position:absolute;top:calc(100% + 8px);left:0;min-width:158px;background:var(--white);border-radius:12px;padding:7px;box-shadow:0 12px 30px rgba(28,70,52,.18);z-index:140;}
+.dropdown:hover .dropdown-menu{display:block;animation:ddFade .2s ease;}
+@keyframes ddFade{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
+.dropdown-menu a{display:block;color:var(--ink);text-decoration:none;font-size:14px;padding:9px 14px;border-radius:8px;transition:.18s;}
+.dropdown-menu a:hover{background:var(--mint);color:#fff;}
+.dropdown-menu a+span{display:none;}
+.dropdown{position:relative;}
+.dropdown-menu{position:absolute;top:calc(100% + 8px);right:0;min-width:168px;background:var(--white);border-radius:14px;padding:8px;box-shadow:0 10px 30px rgba(28,70,52,.18);opacity:0;visibility:hidden;transform:translateY(-6px);transition:.22s;z-index:120;}
+.dropdown:hover .dropdown-menu,.dropdown:focus-within .dropdown-menu{opacity:1;visibility:visible;transform:translateY(0);}
+.dropdown-menu a{display:block;color:var(--ink);padding:9px 12px;font-size:14px;border-radius:9px;}
+.dropdown-menu a:hover{background:var(--light);}
+.nav-user{display:flex;align-items:center;gap:6px;margin-left:6px;position:relative;}
+.nav-user .avatar{width:36px;height:36px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;border:2px solid var(--mint);cursor:pointer;}
+.nav-user .nick{color:var(--ink);font-size:14px;font-weight:500;}
+@media(max-width:860px){.nav-links a{font-size:13px;padding:7px 9px;}.logo .logo-txt{font-size:21px;}.site-nav{padding:10px 14px;}.nav-user .nick{display:none;}}
+.page{padding-top:96px;max-width:1180px;margin:0 auto;padding-left:24px;padding-right:24px;}
+.page-head{text-align:center;margin-bottom:40px;}
+.page-head h1{font-family:"ZCOOL KuaiLe","YouYuan","幼圆",sans-serif;font-size:clamp(28px,5vw,42px);color:var(--deep);letter-spacing:3px;margin-bottom:12px;}
+.page-head .dot{color:var(--orange);}
+.page-head p{font-size:15px;color:#5c6b64;letter-spacing:1px;max-width:680px;margin:0 auto;}
+.section-title{display:flex;align-items:center;gap:12px;margin:44px 0 22px;}
+.section-title .no{width:38px;height:38px;border-radius:12px;background:var(--mint);color:#fff;display:flex;align-items:center;justify-content:center;font-family:"ZCOOL KuaiLe","YouYuan","幼圆",sans-serif;font-size:18px;flex-shrink:0;}
+.section-title h2{font-family:"ZCOOL KuaiLe","YouYuan","幼圆",sans-serif;color:var(--deep);font-size:24px;letter-spacing:1px;}
+.btn{background:var(--mint);color:#fff;border:none;padding:12px 30px;border-radius:30px;font-size:15px;font-weight:600;cursor:pointer;transition:.2s;font-family:inherit;}
+.btn:hover{background:var(--deep);}
+/* 职路护航 · 四大支持节点 */
+.career-slider{display:flex;flex-direction:column;gap:18px;}
+.career-card{width:100%;background:var(--cream);border-radius:20px;padding:26px 24px;cursor:pointer;box-shadow:0 5px 18px rgba(46,84,64,.06);transition:.28s;border:1px solid rgba(95,185,141,.12);}
+.career-card:hover{transform:translateY(-5px);box-shadow:0 12px 28px rgba(46,84,64,.14);}
+.career-card .ric{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;background:var(--light);}
+.career-card .ric svg{width:30px;height:30px;}
+.career-card h3{color:var(--deep);font-size:19px;margin-bottom:8px;}
+.career-card .sub{font-size:13px;color:#5c6b64;line-height:1.7;margin-bottom:14px;}
+.career-card .caret{font-size:13px;color:var(--mint);font-weight:700;letter-spacing:1px;}
+.career-card .cdetail{max-height:0;overflow:hidden;transition:max-height .5s ease;font-size:14px;color:#43534b;line-height:1.85;border-top:1px dashed rgba(95,185,141,.3);margin-top:0;}
+.career-card.open .cdetail{max-height:1600px;padding-top:16px;margin-top:16px;}
+.map{background:var(--white);border-radius:22px;padding:30px;box-shadow:0 6px 22px rgba(46,84,64,.06);}
+.map-box{position:relative;background:linear-gradient(150deg,#EAF2E9,#DCF0E5);border-radius:18px;height:260px;overflow:hidden;border:2px dashed rgba(62,142,110,.4);display:flex;align-items:center;justify-content:center;}
+.map-box .map-note{color:var(--deep);font-size:16px;font-family:"ZCOOL KuaiLe","YouYuan","幼圆",sans-serif;letter-spacing:2px;text-align:center;line-height:2;}
+.map-box .map-note small{display:block;font-family:"Noto Sans SC","Microsoft YaHei",sans-serif;font-size:13px;color:#5c6b64;letter-spacing:0;}
+.org-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px;}
+.org{background:var(--cream);border-radius:16px;padding:20px;transition:.28s;box-shadow:0 4px 14px rgba(46,84,64,.05);}
+.org .org-link{display:inline-block;margin-top:10px;color:var(--mint);font-weight:600;font-size:13px;text-decoration:none;border-bottom:1px dashed var(--mint);}
+.org .org-link:hover{color:#2c6e53;}
+.c-btn{display:block;margin:18px auto 2px;background:var(--light);color:var(--deep);border:none;padding:8px 20px;border-radius:20px;font-size:13px;cursor:pointer;font-family:inherit;transition:.2s;}
+.c-btn:hover{background:var(--mint);color:#fff;}
+.org:hover{transform:translateY(-4px);box-shadow:0 10px 24px rgba(46,84,64,.13);}
+.org b{display:block;color:var(--deep);font-size:15px;margin-bottom:8px;}
+.org p{font-size:13px;color:#43534b;line-height:1.75;margin-bottom:10px;}
+.org .mail{font-size:12.5px;color:var(--orange);font-weight:600;}
+.qa{display:flex;flex-direction:column;gap:14px;}
+.q-item{background:var(--cream);border-radius:16px;padding:20px 22px;box-shadow:0 4px 14px rgba(46,84,64,.05);cursor:pointer;}
+.q-item .q{font-weight:600;color:var(--deep);display:flex;align-items:center;gap:10px;}
+.q-item .q .qm{width:26px;height:26px;border-radius:8px;background:var(--light);color:var(--deep);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.q-item .q .caret{margin-left:auto;color:var(--orange);transition:transform .3s;}
+.q-item .a{max-height:0;overflow:hidden;transition:max-height .45s ease;font-size:14.5px;color:#43534b;line-height:1.9;}
+.q-item.open .a{max-height:400px;padding-top:12px;margin-top:12px;border-top:1px dashed rgba(95,185,141,.3);}
+.mock-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.mock-step{background:var(--white);border-radius:18px;padding:22px;box-shadow:0 5px 18px rgba(46,84,64,.06);border-top:4px solid var(--mint);}
+.mock-step b{display:block;color:var(--deep);font-size:16px;margin-bottom:8px;}
+.mock-step p{font-size:13.5px;color:#43534b;line-height:1.8;}
+.law-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.law{background:var(--white);border-radius:16px;padding:20px;box-shadow:0 4px 14px rgba(46,84,64,.05);border-left:5px solid var(--mint);cursor:pointer;transition:.28s;}
+.law:hover{transform:translateY(-4px);box-shadow:0 10px 24px rgba(46,84,64,.12);}
+.law h3{color:var(--deep);font-size:16px;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.law h3 .arr{color:var(--orange);transition:transform .3s;}
+.law.open h3 .arr{transform:rotate(90deg);}
+.law p{font-size:13.5px;color:#43534b;line-height:1.8;}
+.law .detail{max-height:0;overflow:hidden;transition:max-height .45s ease;font-size:13.5px;color:#43534b;line-height:1.85;}
+.law.open .detail{max-height:420px;padding-top:12px;margin-top:12px;border-top:1px dashed rgba(95,185,141,.3);}
+.flow{background:var(--palegreen);border-radius:20px;padding:28px;}
+.flow-step{display:grid;grid-template-columns:64px 1fr;gap:16px;align-items:start;position:relative;padding:10px 0 22px;}
+.flow-step:not(:last-child)::before{content:"";position:absolute;left:31px;top:56px;bottom:4px;width:2px;background:var(--light);}
+.flow-step .dot{width:64px;height:64px;border-radius:50%;background:var(--white);border:3px solid var(--mint);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;z-index:1;}
+.flow-step .dot b{color:var(--deep);font-size:16px;}
+.flow-step .dot span{font-size:9px;color:#7a8b82;}
+.flow-step .fc h4{color:var(--deep);font-size:16px;margin-bottom:6px;}
+.flow-step .fc p{font-size:13.5px;color:#43534b;line-height:1.8;}
+.channel{background:var(--cream);border-radius:20px;padding:28px;}
+.ch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px;}
+.ch-item{background:var(--white);border-radius:14px;padding:20px;box-shadow:0 3px 10px rgba(46,84,64,.05);}
+.ch-item b{display:block;color:var(--deep);font-size:16px;margin-bottom:8px;}
+.ch-item p{font-size:13px;color:#43534b;line-height:1.75;}
+.ch-note{background:var(--palegreen);border-radius:12px;padding:14px 16px;margin-top:18px;font-size:13px;color:#43534b;line-height:1.8;border-left:4px solid var(--cherry);}
+.field-err{display:none;color:var(--cherry);font-size:12.5px;margin-top:5px;}
+.field-err.show{display:block;}
+.form-ok{display:none;background:var(--light);color:var(--deep);padding:14px 18px;border-radius:12px;font-size:14px;margin-top:14px;}
+.form-ok.show{display:block;}
+.board-nav{display:flex;gap:14px;margin-top:26px;}
+.board-nav .bn{display:inline-flex;align-items:center;gap:6px;background:var(--mint);color:#fff;text-decoration:none;padding:12px 24px;border-radius:30px;font-weight:600;font-size:15px;transition:.22s;}
+.board-nav .bn:hover{background:var(--deep);}
+@media(max-width:900px){.org-grid{grid-template-columns:1fr;}.law-grid{grid-template-columns:1fr;}.ch-grid{grid-template-columns:1fr;}.mock-steps{grid-template-columns:1fr 1fr;}}
+@media(max-width:560px){.mock-steps{grid-template-columns:1fr;}}
+footer{margin-top:60px;background:var(--palegreen);padding:34px 24px 20px;}
+.foot-inner{max-width:1180px;margin:0 auto;}
+.foot-nav{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;margin-bottom:26px;}
+.foot-nav .p-btn{display:inline-flex;align-items:center;gap:8px;background:var(--mint);color:#fff;text-decoration:none;padding:11px 22px;border-radius:30px;font-weight:600;font-size:15px;transition:.22s;}
+.foot-nav .p-btn:hover{background:var(--deep);}
+.foot-nav .p-btn.next{background:var(--orange);}
+.foot-nav .p-btn.next:hover{background:#d98a45;}
+.sitemap{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px 14px;border-top:1px dashed rgba(62,142,110,.3);padding-top:20px;margin-bottom:20px;}
+.sitemap a{color:#4c6258;text-decoration:none;font-size:13px;padding:5px 8px;border-radius:8px;transition:.2s;}
+.sitemap a:hover{background:var(--light);color:var(--deep);}
+.sitemap a.on{background:var(--mint);color:#fff;}
+.foot-extra{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;}
+.foot-extra a{color:var(--deep);text-decoration:none;font-size:13px;padding:8px 16px;border:1.5px solid rgba(62,142,110,.4);border-radius:30px;transition:.2s;}
+.foot-extra a:hover{background:var(--deep);color:#fff;border-color:var(--deep);}
+.copyright{text-align:center;font-size:12px;color:#8a9a91;margin-top:22px;}
+@media(max-width:900px){.org-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<!-- 全站固定导航 -->
+<header class="site-nav">
+  <a class="logo" href="01-cover.html"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" fill="#5FB98D"/><path d="M14 31c6-11 15-14 22-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/><path d="M20 22c2-3 5-4 8-3" stroke="#F7C98F" stroke-width="2.2" stroke-linecap="round"/></svg><span class="logo-txt">印痕</span></a>  <nav class="nav-links">
+    <a href="01-cover.html#home">主页</a>
+    <a href="01-cover.html#about">了解我们</a>
+    <a href="01-cover.html#videos">作品视频</a>
+    <div class="dropdown"><a href="01-cover.html#sections" class="drop-link active">六大板块</a><div class="dropdown-menu"><a href="03-mindset.html">认知破局</a><a href="04-guide.html">生存指南</a><a href="05-museum.html">愈见心声馆</a><a href="06-community.html">互助空间站</a><a href="07-charity.html">公益行动</a><a href="08-career.html">职路护航</a></div></div>
+    <a href="01-cover.html#contact">联系我们</a>
+    <span class="nav-user" id="navUser" title="我的空间" onclick="navUserTap(event)">
+      <span class="nick" id="navNick">未登录</span>
+      <span class="avatar" id="navAvatar">登</span>
+      <a class="logout-btn" id="logoutBtn" href="#" style="display:none">退出</a>
+    </span>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="page-head"><h1>职路护航 <span class="dot">｜</span> 帮你走稳每一步求职路</h1><p>打破求职壁垒，四大支持节点：岗位对接 → 面试赋能 → 维权保障 → 经验反哺，陪你一路向前。</p></div>
+
+  <div class="section-title" style="justify-content:center;text-align:center;"><h2>支持节点（点击展开详情 · 多卡可同时展开）</h2></div>
+  <div class="career-slider">
+    <!-- 岗位对接 -->
+    <div class="career-card">
+      <div class="ric" style="background:var(--light);"><svg viewBox="0 0 24 24" fill="none" stroke="#3E8E6E" stroke-width="1.8" stroke-linecap="round"><path d="M12 21s7-5.2 7-11a7 7 0 10-14 0c0 5.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></div>
+      <h3>岗位对接</h3><p class="sub">友好雇主地图 · 岗位对接，找到接纳你的那扇门。</p>
+      <span class="caret" onclick="event.stopPropagation();toggle(this.parentElement)">点击展开详情 ▾</span>
+      <div class="cdetail">
+        <div class="map">
+          <h3 style="color:var(--deep);font-size:16px;margin-bottom:14px;">友好雇主分布</h3>
+          <div id="empMap" class="map-box" style="position:relative;background:var(--palegreen);border-radius:18px;height:330px;overflow:hidden;border:1px solid rgba(62,142,110,.25);">
+            <div id="empMapFallback" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--deep);font-size:14px;line-height:2;z-index:1;">正在加载友好雇主地图…<small style="font-size:12px;color:#5c6b64;">若长时间未显示地图，请检查网络后刷新页面</small></div>
+          </div>
+          <div class="map-legend" style="display:flex;gap:16px;margin-top:12px;font-size:12.5px;color:#5c6b64;flex-wrap:wrap;">
+            <span style="display:inline-flex;align-items:center;gap:6px;"><i style="width:12px;height:12px;border-radius:50%;background:#3E8E6E;display:inline-block;"></i>友好合作机构点位（悬停查看企业/岗位）</span>
+            <span>默认定位：河南 · 开封</span>
+          </div>
+          <p style="font-size:12px;color:#8a9a91;margin-top:8px;">点位为友好合作机构在开封的示意分布（示例标注），正式入驻企业将陆续上线。地图底图由 OpenStreetMap 提供。</p>
+        </div>
+        <div style="margin-top:18px;">
+          <h3 style="color:var(--deep);font-size:16px;margin-bottom:6px;">友好合作企业 / 公益伙伴</h3>
+          <p style="font-size:13px;color:#5c6b64;line-height:1.7;margin-bottom:14px;">以下公益机构均可对接烧伤救助项目合作，邮箱均为官方公示的正式对接渠道，可直接用于网站「公益伙伴」「合作单位」板块展示。</p>
+          <div class="org-grid">
+            <div class="org"><b>中国社会福利基金会 · 烧烫伤关爱公益基金</b><p>全国性烧烫伤专项帮扶，涵盖贫困患者医疗救助、烧烫伤预防科普、术后康复支持。</p><span class="mail">📧 awh@aiwuhen.org</span><a class="org-link" href="https://www.aiwuhen.org" target="_blank" rel="noopener">访问官网 ↗</a></div>
+            <div class="org"><b>陕西省妇女儿童发展基金会（重度烧伤妇儿救助项目）</b><p>聚焦困境妇女、儿童群体的重度烧伤医疗救治与康复帮扶。</p><span class="mail">📧 office@swcf.org.cn</span><a class="org-link" href="http://www.swcf.org.cn" target="_blank" rel="noopener">访问官网 ↗</a></div>
+            <div class="org"><b>中国红十字基金会</b><p>国家级人道救助机构，覆盖灾害烧伤救援、贫困家庭医疗救助，具备公开募捐资质。</p><span class="mail">📧 crcf@crcf.org.cn</span><a class="org-link" href="https://www.crcf.org.cn" target="_blank" rel="noopener">访问官网 ↗</a></div>
+            <div class="org"><b>中华社会救助基金会</b><p>民政部主管全国性公募基金会，设医疗救助专项，可对接烧伤患者帮扶项目。</p><span class="mail">📧 info@csaf.org.cn</span><a class="org-link" href="http://www.csaf.org.cn" target="_blank" rel="noopener">访问官网 ↗</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 面试赋能 -->
+    <div class="career-card">
+      <div class="ric" style="background:var(--light);"><svg viewBox="0 0 24 24" fill="none" stroke="#3E8E6E" stroke-width="1.8" stroke-linecap="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 016 6c0 2-.8 3.3-1.6 4.4-.5.7-.9 1.3-1.1 2H8.7c-.2-.7-.6-1.3-1.1-2C6.8 12.3 6 11 6 9a6 6 0 016-6z"/></svg></div>
+      <h3>面试赋能</h3><p class="sub">模拟面试与容貌相关提问应对，把紧张练成从容。</p>
+      <span class="caret" onclick="event.stopPropagation();toggle(this.parentElement)">点击展开详情 ▾</span>
+      <div class="cdetail">
+        <h3 style="color:var(--deep);font-size:16px;margin-bottom:14px;">四步模拟面试法</h3>
+        <div class="mock-steps">
+          <div class="mock-step"><b>① 自我介绍</b><p>30-60 秒讲清「我是谁、我能做什么、我来应聘什么」。提前打磨并反复练习。</p></div>
+          <div class="mock-step"><b>② 模拟问答</b><p>找人扮演面试官，模拟高频问题与容貌相关提问，练到自然为止。</p></div>
+          <div class="mock-step"><b>③ 录像复盘</b><p>用手机录下自己的回答，回看表情、语速与表达，逐条改进。</p></div>
+          <div class="mock-step"><b>④ 真实演练</b><p>从低压力场景开始（如参加公开活动、与陌生人交流），逐步建立信心。</p></div>
+        </div>
+        <h3 style="color:var(--deep);font-size:16px;margin:20px 0 12px;">容貌相关提问 · 应对思路</h3>
+        <div class="qa">
+          <div class="q-item" onclick="event.stopPropagation();toggleQa(this)"><div class="q"><span class="qm">Q</span>面试官问起我脸上的疤，我该怎么回应？<span class="caret">▾</span></div><div class="a">原则是<b>不回避、不渲染、快速回到能力</b>。你可以平静地说：「这是我的疤痕，是早年一次意外留下的。它不影响我完成工作的能力。」然后用一句「我们还是来聊聊这个岗位吧」自然地把话题引回正题。<span class="good" style="display:block;background:var(--light);border-radius:10px;padding:10px 14px;margin-top:10px;font-size:13.5px;color:var(--deep);">💡 关键：你的坦然，会让对方也放松下来。</span></div></div>
+          <div class="q-item" onclick="event.stopPropagation();toggleQa(this)"><div class="q"><span class="qm">Q</span>如果我担心对方会因为容貌有偏见怎么办？<span class="caret">▾</span></div><div class="a">首先，把「我担心」和「事实」分开。绝大多数面试官更关注能力与匹配度。其次，用充分的准备对冲紧张——简历扎实、表达清晰，会让你更有底气。若真遇到明显基于容貌的歧视，请记住你在「维权保障」里有权益保护路径，不必独自承受。<span class="good" style="display:block;background:var(--light);border-radius:10px;padding:10px 14px;margin-top:10px;font-size:13.5px;color:var(--deep);">💡 你的价值，从来不由外表定义。</span></div></div>
+          <div class="q-item" onclick="event.stopPropagation();toggleQa(this)"><div class="q"><span class="qm">Q</span>要不要主动提疤痕，还是等对方问？<span class="caret">▾</span></div><div class="a">没有标准答案，取决于你的舒适度。如果你觉得提前说明更自在，可以轻描淡写带过；如果你不想主动提，也完全没关系——等对方问起时再坦然回应即可。<b>你掌握主动权的选择权，这本身就是在做自己。</b><span class="good" style="display:block;background:var(--light);border-radius:10px;padding:10px 14px;margin-top:10px;font-size:13.5px;color:var(--deep);">💡 选让你最自在的方式。</span></div></div>
+        </div>
+        <h3 style="color:var(--deep);font-size:16px;margin:20px 0 12px;">心理建设素材</h3>
+        <div class="psy" style="background:var(--palegreen);border-radius:20px;padding:22px;">
+          <div class="psy-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+            <div class="psy-item" style="background:var(--white);border-radius:14px;padding:18px;"><b style="display:block;color:var(--deep);font-size:15px;margin-bottom:8px;">正念小练习</b><p style="font-size:13px;color:#43534b;line-height:1.8;">面试前做几次深长的呼吸，把注意力拉回当下。想象自己站在面试场里从容作答的画面——让自信先在心里发生。</p></div>
+            <div class="psy-item" style="background:var(--white);border-radius:14px;padding:18px;"><b style="display:block;color:var(--deep);font-size:15px;margin-bottom:8px;">给自己的一封信</b><p style="font-size:13px;color:#43534b;line-height:1.8;">写下你为走到今天付出的努力、你具备的能力与优点。感到紧张时读一遍，提醒自己：你值得这个机会。</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 维权保障 -->
+    <div class="career-card">
+      <div class="ric" style="background:var(--light);"><svg viewBox="0 0 24 24" fill="none" stroke="#3E8E6E" stroke-width="1.8" stroke-linecap="round"><path d="M12 3l8 3v6c0 4.5-3.2 7.6-8 9-4.8-1.4-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+      <h3>全民维权保障</h3><p class="sub">劳动合同与反就业歧视维权工具，你的权益值得守护。</p>
+      <span class="caret" onclick="event.stopPropagation();toggle(this.parentElement)">点击展开详情 ▾</span>
+      <div class="cdetail">
+        <h3 style="color:var(--deep);font-size:16px;margin-bottom:14px;">劳动合同与反就业歧视（点击展开）</h3>
+        <div class="law-grid">
+          <div class="law" onclick="event.stopPropagation();toggle(this)"><h3>劳动合同要点<span class="arr">▸</span></h3><p>入职后应及时签订书面劳动合同。留意合同中的工作内容、地点、薪酬、工时与试用期等关键条款。</p><div class="detail">正式劳动合同应写明双方权利义务。签前逐条阅读，不清楚的条款务必问明。试用期时长与法律规定的劳动合同期限挂钩，需依法约定。务必保留好合同与相关工资凭证，作为维权的重要依据。</div></div>
+          <div class="law" onclick="event.stopPropagation();toggle(this)"><h3>反就业歧视依据<span class="arr">▸</span></h3><p>就业平等受法律保护，用人单位不得基于与岗位无关的容貌等特征设置不合理的歧视性条件。</p><div class="detail">招聘中基于与工作能力无关的外观特征设置歧视性门槛，涉嫌违反就业平等原则。若在招聘、录用、晋升等环节遭遇不公，可依法主张权利。因具体情况复杂，建议保留证据并向人社部门咨询或申请劳动仲裁。</div></div>
+          <div class="law" onclick="event.stopPropagation();toggle(this)"><h3>常见侵权行为<span class="arr">▸</span></h3><p>包括：无故辞退、克扣工资、违法延长试用期、就业歧视等。</p><div class="detail">了解哪些行为属于侵权，是保护自己的第一步。例如：无正当理由解除劳动合同、不依法支付报酬、以与能力无关的理由在录用或晋升中区别对待等。遇到这些情况，请保留证据并及时寻求帮助。</div></div>
+          <div class="law" onclick="event.stopPropagation();toggle(this)"><h3>证据保存清单<span class="arr">▸</span></h3><p>劳动合同、工资流水、聊天记录、面试通知与录用沟通、工作往来邮件等。</p><div class="detail">维权的基础是证据。请妥善保存：劳动合同及附件、工资发放记录、考勤记录、与HR/上级的沟通记录、涉及歧视或不当对待的文字与录音（注意合法性）、以及任何相关凭证。做好备份，以备不时之需。</div></div>
+        </div>
+        <h3 style="color:var(--deep);font-size:16px;margin:20px 0 12px;">遇到侵权怎么办 · 建议路径</h3>
+        <div class="flow">
+          <div class="flow-step"><div class="dot"><b>1</b><span>留证</span></div><div class="fc"><h4>冷静留证</h4><p>第一时间保存好合同、工资流水、沟通记录等证据，不做口头意气之争。</p></div></div>
+          <div class="flow-step"><div class="dot"><b>2</b><span>沟通</span></div><div class="fc"><h4>与单位沟通</h4><p>先尝试与用人单位理性沟通，明确表达诉求，保留沟通记录。</p></div></div>
+          <div class="flow-step"><div class="dot"><b>3</b><span>求助</span></div><div class="fc"><h4>向主管部门求助</h4><p>可向当地人社部门（劳动监察）反映，或申请劳动仲裁，寻求专业支持。</p></div></div>
+          <div class="flow-step"><div class="dot"><b>4</b><span>维权</span></div><div class="fc"><h4>依法维权</h4><p>必要时通过劳动仲裁或法律途径维护自身权益。你并不孤单。</p></div></div>
+        </div>
+        <h3 style="color:var(--deep);font-size:16px;margin:20px 0 12px;">维权渠道与提示</h3>
+        <div class="channel">
+          <div class="ch-grid">
+            <div class="ch-item"><b>劳动监察部门</b><p>可就违法用工等问题向当地劳动保障监察机构投诉举报。</p></div>
+            <div class="ch-item"><b>劳动人事争议仲裁</b><p>因劳动合同等发生争议，可依法申请劳动仲裁。</p></div>
+            <div class="ch-item"><b>法律援助</b><p>符合条件的可申请法律援助，获取免费法律服务。</p></div>
+          </div>
+          <div class="ch-note">温馨提示：以上内容为科普参考，不构成法律意见。具体情况建议咨询专业法律人士或拨打人力资源和社会保障服务热线了解最新政策。</div>
+        </div>
+      </div>
+    </div>
+    <!-- 经验反哺 -->
+    <div class="career-card">
+      <div class="ric" style="background:var(--light);"><svg viewBox="0 0 24 24" fill="none" stroke="#3E8E6E" stroke-width="1.8" stroke-linecap="round"><path d="M3 11c0-4 4-7 9-7s9 3 9 7-4 7-9 7c-.8 0-1.6-.1-2.3-.2L6 20v-3.7C4 14.9 3 13 3 11z"/></svg></div>
+      <h3>经验反哺</h3><p class="sub">过来人经验分享与留言交流，你的经验是别人的光。</p>
+      <span class="caret" onclick="event.stopPropagation();toggle(this.parentElement)">点击展开详情 ▾</span>
+      <div class="cdetail">
+        <h3 style="color:var(--deep);font-size:16px;margin-bottom:14px;">过来人经验分享</h3>
+        <div class="post empty-post" style="background:var(--cream);border-radius:18px;padding:22px;box-shadow:0 5px 18px rgba(46,84,64,.06);">
+          <div class="head" style="display:flex;align-items:center;gap:12px;margin-bottom:12px;"><div class="avatar" style="width:44px;height:44px;border-radius:50%;background:var(--light);display:flex;align-items:center;justify-content:center;color:var(--deep);font-size:17px;">·</div><div class="meta"><b style="display:block;color:var(--deep);font-size:15px;">暂无经验分享</b><span style="font-size:12.5px;color:#8a9a91;">等待你的投稿</span></div></div>
+          <p style="font-size:14px;color:#43534b;line-height:1.8;margin-bottom:12px;">这里还没有真实的经验分享。欢迎在下方写下你的求职与职场经验，你的分享会是别人的一束光。</p>
+        </div>
+        <h3 style="color:var(--deep);font-size:16px;margin:20px 0 12px;">写下你的故事</h3>
+        <div class="publish" style="background:var(--palegreen);border-radius:18px;padding:22px;">
+          <h3 style="font-family:'ZCOOL KuaiLe','YouYuan','幼圆',sans-serif;color:var(--deep);font-size:18px;margin-bottom:6px;">把你的经验留在这里</h3>
+          <p style="font-size:13px;color:#5c6b64;margin-bottom:12px;">你的分享会自动归集到你的「我的空间」，成为成长轨迹的一部分。</p>
+          <textarea id="pubBody" rows="3" style="width:100%;padding:12px 14px;border:1.5px solid rgba(62,142,110,.3);border-radius:12px;font-size:14px;font-family:inherit;background:var(--white);color:var(--ink);margin-bottom:10px;" placeholder="分享一段你的求职或职场经验……"></textarea>
+          <div class="field-err" id="pubBodyErr">此项不能为空</div>
+          <button class="btn" onclick="publishTree()">发布经验</button>
+          <div class="form-ok" id="pubOk">已发布！感谢你的分享。这条经验已同步归集到你的「我的空间」。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="board-nav">
+  </div>
+</main>
+
+<!-- 页脚 -->
+<footer>
+  <div class="foot-inner">
+    <div class="foot-nav"><a class="p-btn" href="07-charity.html">← 上一页 · 公益行动</a></div>
+        <div class="sitemap">
+      <a href="01-cover.html">1 主页封面</a>
+      <a href="01-cover.html#about">2 了解我们</a>
+      <a href="01-cover.html#videos">3 作品视频</a>
+      <a href="03-mindset.html">4 认知破局</a>
+      <a href="04-guide.html">5 生存指南</a>
+      <a href="05-museum.html">6 愈见心声馆</a>
+      <a href="06-community.html">7 互助空间站</a>
+      <a href="07-charity.html">8 公益行动</a>
+      <a class="on" href="08-career.html">9 职路护航</a>
+      <a href="01-cover.html#contact">10 联系我们</a>
+      <a href="16-space.html">我的空间</a>
+    </div>
+    <div class="foot-extra"><a href="#" id="adminBtn">内容编辑后台</a><a href="#" id="volBtn">申请成为志愿者</a></div>
+    <p class="copyright">《印痕》数字编辑创新大赛参赛作品 · 温柔治愈 · 关爱与帮助</p>
+    <p class="copyright" style="font-size:11px;opacity:.6;">版本 v6.1 · 2026-10-07</p>
+  </div>
+</footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+/* ===== 友好雇主地图（Leaflet + OpenStreetMap，默认定位开封）===== */
+/* 地图懒加载：首次展开「岗位对接」卡片时才初始化，避免页面加载即拉取瓦片 */
+var empMapInited=false;
+function initEmpMap(){
+  if(empMapInited)return;
+  empMapInited=true;
+  var box=document.getElementById('empMap');
+  if(!box)return;
+  if(typeof L==='undefined'){
+    var fb0=document.getElementById('empMapFallback');
+    if(fb0)fb0.innerHTML='地图组件加载失败<small style="font-size:12px;color:#5c6b64;">请联网后刷新页面查看友好雇主地图</small>';
+    return;
+  }
+  var kaifeng=[34.7973,114.3074];
+  var map=L.map(box,{scrollWheelZoom:false}).setView(kaifeng,12);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'© OpenStreetMap contributors'}).addTo(map);
+  setTimeout(function(){map.invalidateSize();},120);
+  var spots=[
+    {n:'中国社会福利基金会 · 烧烫伤关爱公益基金',job:'烧烫伤救助项目专员岗（示例）',mail:'awh@aiwuhen.org',p:[34.812,114.278]},
+    {n:'陕西省妇女儿童发展基金会（重度烧伤妇儿救助项目）',job:'妇儿救助项目专员岗（示例）',mail:'office@swcf.org.cn',p:[34.795,114.352]},
+    {n:'中国红十字基金会',job:'人道救助项目协调岗（示例）',mail:'crcf@crcf.org.cn',p:[34.833,114.326]},
+    {n:'中华社会救助基金会',job:'医疗救助专项助理岗（示例）',mail:'info@csaf.org.cn',p:[34.763,114.296]}
+  ];
+  spots.forEach(function(s){
+    L.marker(s.p).addTo(map).bindTooltip('<b>'+s.n+'</b><br>岗位方向：'+s.job+'<br>📧 '+s.mail,{direction:'top',offset:[0,-10]});
+  });
+  var fb=document.getElementById('empMapFallback');
+  if(fb)fb.style.display='none';
+}
+</script>
+<script>
+/* 职路护航卡片独立展开：允许多张同时展开；展开后顶部文字切换为「点击收起卡片」（问答子卡仅切换三角图标，不旋转文字） */
+function toggle(el){
+  if(!el||!el.classList)return;
+  var open=el.classList.contains('open');
+  var caret=el.querySelector('.caret');
+  var isQ=el.classList.contains('q-item');
+  if(open){
+    el.classList.remove('open');
+    if(caret)caret.textContent=isQ?'▾':'点击展开详情 ▾';
+  }else{
+    el.classList.add('open');
+    if(caret)caret.textContent=isQ?'▲ 点击收起':'点击收起卡片 ▼';
+    if(el.querySelector('#empMap'))initEmpMap();
+  }
+}
+/* 面试赋能容貌相关提问：同组互斥，一次只展开一个；展开提示正显、收起还原纯三角图标 */
+function toggleQa(el){
+  if(!el||!el.classList)return;
+  var box=el.parentElement;
+  var open=el.classList.contains('open');
+  if(box){
+    var list=box.querySelectorAll('.q-item.open');
+    for(var i=0;i<list.length;i++){
+      if(list[i]!==el){
+        list[i].classList.remove('open');
+        var c=list[i].querySelector('.caret');
+        if(c)c.textContent='▾';
+      }
+    }
+  }
+  var caret=el.querySelector('.caret');
+  if(!open){el.classList.add('open');if(caret)caret.textContent='▲ 点击收起';}
+  else{el.classList.remove('open');if(caret)caret.textContent='▾';}
+}
+/* 展开后底部「点击收起」按钮 */
+(function(){
+  var list=document.querySelectorAll('.career-card .cdetail');
+  for(var i=0;i<list.length;i++){
+    (function(d){
+      var b=document.createElement('button');
+      b.type='button';b.className='c-btn';b.textContent='点击收起 ▲';
+      b.onclick=function(){
+        var c=d.parentElement;
+        c.classList.remove('open');
+        var cr=c.querySelector('.caret');
+        if(cr)cr.textContent='点击展开详情 ▾';
+      };
+      d.appendChild(b);
+    })(list[i]);
+  }
+})();
+function chkFields(ids){
+  var ok=true;
+  ids.forEach(function(id){
+    var el=document.getElementById(id),err=document.getElementById(id+'Err');
+    var v=(el&&el.value!==undefined)?el.value.trim():'';
+    if(!v){if(el)el.classList.add('err');if(err)err.classList.add('show');ok=false;}
+    else{if(el)el.classList.remove('err');if(err)err.classList.remove('show');}
+  });
+  return ok;
+}
+document.addEventListener('input',function(e){
+  var el=e.target;
+  if(!el||!el.id)return;
+  el.classList.remove('err');
+  var err=document.getElementById(el.id+'Err');
+  if(err)err.classList.remove('show');
+});
+/* 经验发布：空校验 + 同步我的空间 */
+function publishTree(){
+  requireLogin(doPublishTree);
+}
+function doPublishTree(){
+  if(!chkFields(['pubBody']))return;
+  addWork(curUser(),'【职路经验】'+document.getElementById('pubBody').value.trim(),['经验']);
+  document.getElementById('pubOk').style.display='block';document.getElementById('pubBody').value='';
+}
+document.getElementById('adminBtn').addEventListener('click',function(e){e.preventDefault();alert('「内容编辑后台」为演示态入口。');});
+document.getElementById('volBtn').addEventListener('click',function(e){e.preventDefault();alert('感谢你的善意！志愿者招募入口详见「公益行动 · 志愿招募」。');});
+</script>
+
+<style>
+.toast{position:fixed;top:76px;left:50%;transform:translateX(-50%);background:rgba(44,58,52,.94);color:#fff;padding:10px 22px;border-radius:24px;font-size:14px;z-index:400;opacity:0;pointer-events:none;transition:.25s;white-space:nowrap;}
+.toast.show{opacity:1;}
+.lm{position:fixed;inset:0;background:rgba(28,50,40,.5);display:none;align-items:center;justify-content:center;z-index:300;padding:20px;}
+.lm.show{display:flex;}
+.lm-box{background:var(--white);border-radius:22px;padding:30px;max-width:400px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.25);position:relative;}
+.lm-tabs{display:flex;gap:8px;margin-bottom:20px;background:var(--cream);border-radius:12px;padding:5px;}
+.lm-tab{flex:1;text-align:center;padding:9px;border:none;border-radius:9px;background:none;font-family:inherit;font-size:15px;font-weight:600;color:#5c6b64;cursor:pointer;}
+.lm-tab.active{background:var(--mint);color:#fff;}
+.lm-field{margin-bottom:12px;}
+.lm-field label{display:block;font-size:13px;color:var(--deep);font-weight:600;margin-bottom:6px;}
+.lm-field input{width:100%;padding:11px 13px;border:1.5px solid rgba(62,142,110,.3);border-radius:11px;font-size:14px;font-family:inherit;background:var(--cream);color:var(--ink);}
+.lm-row{display:flex;gap:10px;}
+.lm-row input{flex:1;}
+.lm-row button{background:var(--light);color:var(--deep);border:none;padding:0 14px;border-radius:11px;cursor:pointer;font-family:inherit;font-weight:600;white-space:nowrap;}
+.lm-actions{margin-top:16px;display:flex;gap:10px;justify-content:flex-end;}
+.lm-actions .btn{background:var(--mint);color:#fff;border:none;padding:11px 26px;border-radius:24px;cursor:pointer;font-weight:600;font-family:inherit;font-size:15px;}
+.lm-actions .btn:hover{background:var(--deep);}
+.lm-close{position:absolute;top:16px;right:18px;background:none;border:none;font-size:24px;color:#8a9a91;cursor:pointer;font-family:inherit;}
+.lm-hint{font-size:12px;color:#8a9a91;text-align:center;margin-top:12px;}
+#navUser{position:relative;display:flex;align-items:center;gap:6px;margin-left:6px;}
+.nav-user .avatar{width:36px;height:36px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;border:2px solid var(--mint);cursor:pointer;}
+.nav-user .nick{color:var(--ink);font-size:14px;font-weight:500;}
+.nav-user .logout-btn{font-size:12px;padding:5px 12px;border:1px solid rgba(62,142,110,.5);border-radius:16px;color:var(--deep);text-decoration:none;margin-left:6px;transition:.25s;}
+.nav-user .logout-btn:hover{background:var(--cherry);color:#fff;border-color:var(--cherry);}
+@media(max-width:860px){.nav-user .nick{display:none;}}
+</style>
+<div class="toast" id="toast"></div>
+<div class="lm" id="loginModal">
+  <div class="lm-box">
+    <button class="lm-close" onclick="closeLogin()">×</button>
+    <div class="lm-tabs">
+      <div class="lm-tab active" id="tabLogin" onclick="switchTab('login')">手机号登录</div>
+      <div class="lm-tab" id="tabReg" onclick="switchTab('reg')">注册新账号</div>
+    </div>
+    <div id="paneLogin">
+      <div class="lm-field"><label>手机号</label><input type="tel" id="lgPhone" maxlength="11" placeholder="请输入11位手机号"></div>
+      <div class="lm-field"><label>密码</label><input type="password" id="lgPassword" maxlength="16" placeholder="请输入密码"></div>
+      <div class="lm-actions"><button class="btn" onclick="doLogin()">登录</button></div>
+    </div>
+    <div id="paneReg" style="display:none">
+      <div class="lm-field"><label>手机号</label><input type="tel" id="rgPhone" maxlength="11" placeholder="请输入11位手机号"></div>
+      <div class="lm-field"><label>昵称</label><input type="text" id="rgNick" maxlength="12" placeholder="给自己起个昵称"></div>
+      <div class="lm-field"><label>密码</label><input type="password" id="rgPassword" maxlength="16" placeholder="设置密码（至少4位）"></div>
+      <div class="lm-actions"><button class="btn" onclick="doRegister()">注册并登录</button></div>
+    </div>
+    <div class="lm-hint">测试账号：13800001111　密码：1234</div>
+  </div>
+</div>
+<script>
+/* 印痕 · 登录与数据系统（localStorage 持久化，按手机号隔离） */
+var USERS_KEY='yinhen_users', SESSION_KEY='yinhen_session';
+function allUsers(){try{return JSON.parse(localStorage.getItem(USERS_KEY))||{};}catch(e){return {};}}
+function saveUsers(u){localStorage.setItem(USERS_KEY,JSON.stringify(u));}
+function curUser(){return localStorage.getItem(SESSION_KEY)||'';}
+function setSession(p){localStorage.setItem(SESSION_KEY,p);}
+function curAccount(){var p=curUser();return p?allUsers()[p]:null;}
+function validPhone(p){return /^1\d{10}$/.test((p||'').trim());}
+function toast(msg){var t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show');},2200);}
+function showToast(msg){toast(msg);}
+function openLogin(){document.getElementById('loginModal').classList.add('show');}
+function closeLogin(){document.getElementById('loginModal').classList.remove('show');}
+function switchTab(k){var isLogin=(k==='login');document.getElementById('tabLogin').classList.toggle('active',isLogin);document.getElementById('tabReg').classList.toggle('active',!isLogin);document.getElementById('paneLogin').style.display=isLogin?'block':'none';document.getElementById('paneReg').style.display=isLogin?'none':'block';}
+function getCode(kind){var p=document.getElementById(kind+'Phone').value.trim();if(!validPhone(p)){toast('请输入 1 开头的 11 位手机号');return;}toast('验证码已发送（演示模拟）');}
+var _afterLogin=null;
+function requireLogin(cb){
+  if(curUser()){if(cb)cb();return true;}
+  toast('您尚未登录，请先登录，登录后才可发布帖子');
+  _afterLogin=cb||null;
+  setTimeout(function(){openLogin();},400);
+  return false;
+}
+function doLogin(){var p=document.getElementById('lgPhone').value.trim();if(!validPhone(p)){toast('请输入 1 开头的 11 位手机号');return;}var u=allUsers();if(!u[p]){toast('该手机号未注册，请先注册');return;}var pw=document.getElementById('lgPassword').value.trim();if(!pw){toast('请输入密码');return;}if((u[p].password||'1234')!==pw){toast('密码错误，请重新输入');return;}setSession(p);closeLogin();refreshNav();var f=_afterLogin;_afterLogin=null;if(f)f();toast('欢迎回来，'+(u[p].nick||'朋友')+'');}
+function doRegister(){var p=document.getElementById('rgPhone').value.trim();var n=document.getElementById('rgNick').value.trim();var pw=document.getElementById('rgPassword').value.trim();if(!validPhone(p)){toast('请输入 1 开头的 11 位手机号');return;}if(!n){toast('请输入昵称');return;}if(!pw||pw.length<4){toast('密码至少 4 位');return;}var u=allUsers();if(u[p]){toast('该手机号已注册，请直接登录');return;}u[p]={nick:n,password:pw,sig:'',works:[],received:[],medalFlags:{firstWork:false,fiveLikes:false},medals:[],created:Date.now()};saveUsers(u);setSession(p);closeLogin();refreshNav();var f=_afterLogin;_afterLogin=null;if(f)f();toast('注册成功，欢迎加入印痕！');}
+function logout(){localStorage.removeItem(SESSION_KEY);refreshNav();toast('已退出登录');}
+/* 右上角用户入口（HTML 级兜底绑定）：已登录 → 我的空间；未登录 → 提示并弹出登录 */
+function navUserTap(e){
+  if(e&&e.target&&e.target.closest&&e.target.closest('#logoutBtn'))return;
+  if(curUser()){window.location.href='16-space.html';}
+  else{toast('请先登录');setTimeout(function(){openLogin();},350);}
+}
+function refreshNav(){var u=curUser(),acc=curAccount(),nn=document.getElementById('navNick'),na=document.getElementById('navAvatar'),lb=document.getElementById('logoutBtn');if(!nn||!na)return;if(u&&acc){nn.textContent=acc.nick;na.textContent=acc.nick.charAt(0);if(lb)lb.style.display='inline-block';}else{nn.textContent='未登录';na.textContent='登';if(lb)lb.style.display='none';}}
+function grantMedal(phone,name){var u=allUsers(),acc=u[phone];if(!acc||acc.medals.indexOf(name)>-1)return;acc.medals.push(name);if(name==='初次发声')acc.medalFlags.firstWork=true;if(name==='人气伙伴')acc.medalFlags.fiveLikes=true;saveUsers(u);toast('恭喜解锁奖章「'+name+'」！');}
+function addWork(phone,text,tags){var u=allUsers(),acc=u[phone];if(!acc)return;var w={id:'w'+Date.now(),time:new Date().getTime(),text:text,tags:tags||[],likes:0};acc.works.unshift(w);saveUsers(u);if(!acc.medalFlags.firstWork)grantMedal(phone,'初次发声');return w;}
+function receiveLike(phone,workId){var u=allUsers(),acc=u[phone];if(!acc)return;acc.received.unshift({from:'热心用户',workId:workId,time:Date.now()});acc.received=acc.received.slice(0,50);saveUsers(u);if(acc.received.length>=5&&!acc.medalFlags.fiveLikes)grantMedal(phone,'人气伙伴');}
+function fmtTime(ts){var d=new Date(ts);return (d.getFullYear())+' 年 '+(d.getMonth()+1)+' 月 '+d.getDate()+' 日';}
+(function(){var nu=document.getElementById('navUser');if(nu){nu.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('#logoutBtn'))return;if(curUser()){window.location.href='16-space.html';}else{toast('请先登录');setTimeout(function(){openLogin();},400);}});}var lb=document.getElementById('logoutBtn');if(lb){lb.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();logout();});}refreshNav();})();
+</script>
+
+</body>
+</html>

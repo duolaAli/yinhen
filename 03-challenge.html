@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大众认知挑战 · 印痕</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%235FB98D'/%3E%3Cpath d='M9 20c4-7 10-9 15-6' stroke='%23FAF5EA' stroke-width='2.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+<style>
+:root{--mint:#5FB98D;--deep:#3E8E6E;--light:#DCF0E5;--cream:#FAF5EA;--palegreen:#EAF2E9;--orange:#F0A35E;--cherry:#E4635F;--ink:#2C3A34;--white:#fff;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:"Noto Sans SC","Microsoft YaHei",-apple-system,"PingFang SC",sans-serif;color:var(--ink);background:var(--cream);}
+.site-nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:12px 26px;background:rgba(250,245,234,.95);backdrop-filter:blur(8px);box-shadow:0 2px 14px rgba(46,84,64,.08);}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
+.logo svg{width:32px;height:32px;}
+.logo .logo-txt{font-family:"ZCOOL KuaiLe","YouYuan","幼圆",sans-serif;font-size:25px;color:var(--deep);letter-spacing:2px;}
+.nav-links{display:flex;align-items:center;gap:4px;flex-wrap:wrap;}
+.nav-links a{color:var(--ink);text-decoration:none;font-size:15px;padding:8px 13px;border-radius:22px;transition:.22s;white-space:nowrap;}
+.nav-links a:hover{background:var(--light);color:var(--deep);}
+.nav-links a.active{background:var(--mint);color:#fff;}
+.dropdown{position:relative;}
+.dropdown-menu{display:none;position:absolute;top:calc(100% + 8px);left:0;min-width:158px;background:var(--white);border-radius:12px;padding:7px;box-shadow:0 12px 30px rgba(28,70,52,.18);z-index:140;}
+.dropdown:hover .dropdown-menu{display:block;animation:ddFade .2s ease;}
+@keyframes ddFade{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
+.dropdown-menu a{display:block;color:var(--ink);text-decoration:none;font-size:14px;padding:9px 14px;border-radius:8px;transition:.18s;}
+.dropdown-menu a:hover{background:var(--mint);color:#fff;}
+.dropdown-menu a+span{display:none;}
+#navUser{position:relative;display:flex;align-items:center;gap:6px;margin-left:6px;}
+.nav-user .avatar{width:36px;height:36px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;border:2px solid var(--mint);cursor:pointer;}
+.nav-user .nick{color:var(--ink);font-size:14px;font-weight:500;}
+.nav-user .logout-btn{font-size:12px;padding:5px 12px;border:1px solid rgba(62,142,110,.5);border-radius:16px;color:var(--deep);text-decoration:none;margin-left:6px;transition:.25s;}
+.nav-user .logout-btn:hover{background:var(--cherry);color:#fff;border-color:var(--cherry);}
+@media(max-width:860px){.nav-links a{font-size:13px;padding:7px 9px;}.logo .logo-txt{font-size:21px;}.site-nav{padding:10px 14px;}.nav-user .nick{display:none;}}
+.page{padding-top:96px;max-width:760px;margin:0 auto;padding-left:24px;padding-right:24px;}
+.page-head{text-align:center;margin-bottom:36px;}
+.page-head h1{font-family:"ZCOOL KuaiLe","YouYuan","幼圆",sans-serif;font-size:clamp(28px,5vw,40px);color:var(--deep);letter-spacing:3px;margin-bottom:12px;}
+.page-head .dot{color:var(--orange);}
+.page-head p{font-size:14.5px;color:#5c6b64;letter-spacing:1px;max-width:620px;margin:0 auto;line-height:1.8;}
+.chal-box{background:var(--white);border-radius:22px;padding:30px;box-shadow:0 6px 24px rgba(46,84,64,.07);}
+.chal-note{font-size:12.5px;color:var(--orange);font-weight:600;letter-spacing:1px;margin-bottom:14px;}
+.cq{background:var(--cream);border-radius:16px;padding:20px 22px;margin-bottom:16px;}
+.cq .num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:10px;background:var(--mint);color:#fff;font-weight:700;font-size:14px;margin-right:8px;}
+.cq p.t{font-weight:600;color:var(--deep);font-size:15.5px;margin-bottom:12px;display:inline;}
+.cq .opts{margin-top:6px;}
+.cq label{display:block;padding:10px 14px;margin:8px 0;border-radius:12px;background:var(--white);border:1.5px solid rgba(95,185,141,.18);font-size:14px;color:#43534b;cursor:pointer;transition:.2s;}
+.cq label:hover{border-color:var(--mint);background:var(--light);}
+.cq label input{accent-color:var(--mint);margin-right:8px;}
+.cq .ex{display:none;margin-top:10px;padding:12px 14px;border-radius:12px;background:var(--palegreen);font-size:13px;color:#43534b;line-height:1.8;}
+.cq .ex.show{display:block;}
+.cq.correct{border:2px solid var(--mint);}
+.cq.wrong{border:2px solid var(--cherry);}
+.chal-actions{display:flex;align-items:center;gap:14px;margin-top:20px;flex-wrap:wrap;}
+.btn{background:var(--mint);color:#fff;border:none;padding:12px 30px;border-radius:26px;font-weight:600;cursor:pointer;font-family:inherit;font-size:15px;transition:.2s;}
+.btn:hover{background:var(--deep);}
+.btn.ghost{background:var(--cream);color:var(--deep);}
+.score-box{display:none;text-align:center;background:linear-gradient(135deg,var(--light),var(--palegreen));border-radius:18px;padding:26px;margin-top:20px;}
+.score-box.show{display:block;}
+.score-box .sc{font-family:"ZCOOL KuaiLe","YouYuan","幼圆",sans-serif;font-size:44px;color:var(--deep);}
+.score-box p{font-size:14px;color:#43534b;margin-top:8px;line-height:1.8;}
+.back-link{display:inline-block;margin-top:22px;color:var(--deep);text-decoration:none;font-size:14px;padding:10px 20px;border:1.5px solid rgba(62,142,110,.4);border-radius:30px;transition:.2s;}
+.back-link:hover{background:var(--deep);color:#fff;border-color:var(--deep);}
+footer{margin-top:60px;background:var(--palegreen);padding:34px 24px 20px;}
+.foot-inner{max-width:1180px;margin:0 auto;}
+.foot-nav{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;margin-bottom:26px;}
+.foot-nav .p-btn{display:inline-flex;align-items:center;gap:8px;background:var(--mint);color:#fff;text-decoration:none;padding:11px 22px;border-radius:30px;font-weight:600;font-size:15px;transition:.22s;}
+.foot-nav .p-btn:hover{background:var(--deep);}
+.sitemap{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px 14px;border-top:1px dashed rgba(62,142,110,.3);padding-top:20px;margin-bottom:20px;}
+.sitemap a{color:#4c6258;text-decoration:none;font-size:13px;padding:5px 8px;border-radius:8px;transition:.2s;}
+.sitemap a:hover{background:var(--light);color:var(--deep);}
+.sitemap a.on{background:var(--mint);color:#fff;}
+.copyright{text-align:center;font-size:12px;color:#8a9a91;margin-top:22px;}
+.toast{position:fixed;top:76px;left:50%;transform:translateX(-50%);background:rgba(44,58,52,.94);color:#fff;padding:10px 22px;border-radius:24px;font-size:14px;z-index:400;opacity:0;pointer-events:none;transition:.25s;white-space:nowrap;}
+.toast.show{opacity:1;}
+.lm{position:fixed;inset:0;background:rgba(28,50,40,.5);display:none;align-items:center;justify-content:center;z-index:300;padding:20px;}
+.lm.show{display:flex;}
+.lm-box{background:var(--white);border-radius:22px;padding:30px;max-width:400px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.25);position:relative;}
+.lm-tabs{display:flex;gap:8px;margin-bottom:20px;background:var(--cream);border-radius:12px;padding:5px;}
+.lm-tab{flex:1;text-align:center;padding:9px;border:none;border-radius:9px;background:none;font-family:inherit;font-size:15px;font-weight:600;color:#5c6b64;cursor:pointer;}
+.lm-tab.active{background:var(--mint);color:#fff;}
+.lm-field{margin-bottom:12px;}
+.lm-field label{display:block;font-size:13px;color:var(--deep);font-weight:600;margin-bottom:6px;}
+.lm-field input{width:100%;padding:11px 13px;border:1.5px solid rgba(62,142,110,.3);border-radius:11px;font-size:14px;font-family:inherit;background:var(--cream);color:var(--ink);}
+.lm-row{display:flex;gap:10px;}
+.lm-row input{flex:1;}
+.lm-row button{background:var(--light);color:var(--deep);border:none;padding:0 14px;border-radius:11px;cursor:pointer;font-family:inherit;font-weight:600;white-space:nowrap;}
+.lm-actions{margin-top:16px;display:flex;gap:10px;justify-content:flex-end;}
+.lm-actions .btn{background:var(--mint);color:#fff;border:none;padding:11px 26px;border-radius:24px;cursor:pointer;font-weight:600;font-family:inherit;font-size:15px;}
+.lm-actions .btn:hover{background:var(--deep);}
+.lm-close{position:absolute;top:16px;right:18px;background:none;border:none;font-size:24px;color:#8a9a91;cursor:pointer;font-family:inherit;}
+.lm-hint{font-size:12px;color:#8a9a91;text-align:center;margin-top:12px;}
+</style>
+</head>
+<body>
+<!-- 全站固定导航 -->
+<header class="site-nav">
+  <a class="logo" href="01-cover.html"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="23" fill="#5FB98D"/><path d="M14 31c6-11 15-14 22-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/><path d="M20 22c2-3 5-4 8-3" stroke="#F7C98F" stroke-width="2.2" stroke-linecap="round"/></svg><span class="logo-txt">印痕</span></a>
+  <nav class="nav-links">
+    <a href="01-cover.html#home">主页</a>
+    <a href="01-cover.html#about">了解我们</a>
+    <a href="01-cover.html#videos">作品视频</a>
+    <div class="dropdown"><a href="01-cover.html#sections" class="drop-link active">六大板块</a><div class="dropdown-menu"><a href="03-mindset.html">认知破局</a><a href="04-guide.html">生存指南</a><a href="05-museum.html">愈见心声馆</a><a href="06-community.html">互助空间站</a><a href="07-charity.html">公益行动</a><a href="08-career.html">职路护航</a></div></div>
+    <a href="01-cover.html#contact">联系我们</a>
+    <span class="nav-user" id="navUser" title="我的空间" onclick="navUserTap(event)">
+      <span class="nick" id="navNick">未登录</span>
+      <span class="avatar" id="navAvatar">登</span>
+      <a class="logout-btn" id="logoutBtn" href="#" style="display:none">退出</a>
+    </span>
+  </nav>
+</header>
+
+<main class="page">
+  <div class="page-head"><h1>大众认知挑战 <span class="dot">｜</span> 测一测你的认知</h1><p>5 道关于烧伤疤痕的认知题。答对多少，代表你离「无痕偏见」又近了多少。完成后可查看每题解析。</p></div>
+
+  <div class="chal-box">
+    <div class="chal-note">每题 20 分，满分 100 分。选择后点击「提交答案」查看得分与解析。</div>
+    <form id="chalForm">
+      <div class="cq" id="cq1">
+        <span class="num">1</span><p class="t">疤痕会传染给别人吗？</p>
+        <div class="opts">
+          <label><input type="radio" name="c1" value="0"> 会，接触就会传染</label>
+          <label><input type="radio" name="c1" value="20"> 不会，疤痕是自身组织修复的产物</label>
+          <label><input type="radio" name="c1" value="0"> 不一定，看情况</label>
+        </div>
+        <div class="ex">疤痕是皮肤损伤后自身修复形成的组织，不具备任何传染性。「疤痕会传染」是流传最广的误区之一。</div>
+      </div>
+      <div class="cq" id="cq2">
+        <span class="num">2</span><p class="t">遇到带疤痕的人，最得体的表现是？</p>
+        <div class="opts">
+          <label><input type="radio" name="c2" value="20"> 自然交流，和对待任何人一样</label>
+          <label><input type="radio" name="c2" value="0"> 刻意回避眼神，避免尴尬</label>
+          <label><input type="radio" name="c2" value="0"> 主动追问疤痕的来历表示关心</label>
+        </div>
+        <div class="ex">把它当作普通的身体特征，自然、平等地相处就好。不过度注视、不刻意回避，也不追问隐私，是最好的尊重。</div>
+      </div>
+      <div class="cq" id="cq3">
+        <span class="num">3</span><p class="t">疤痕会影响一个人的工作能力吗？</p>
+        <div class="opts">
+          <label><input type="radio" name="c3" value="0"> 会影响，外表是职场第一印象</label>
+          <label><input type="radio" name="c3" value="20"> 不影响，能力取决于知识与经验</label>
+          <label><input type="radio" name="c3" value="0"> 看行业，服务行业会影响</label>
+        </div>
+        <div class="ex">能力与外表毫无关系。真正影响就业的，往往是未经审视的偏见——这正是「职路护航」要打破的壁垒。</div>
+      </div>
+      <div class="cq" id="cq4">
+        <span class="num">4</span><p class="t">烧伤疤痕的科学护理，最正确的是？</p>
+        <div class="opts">
+          <label><input type="radio" name="c4" value="0"> 听信偏方，见效快</label>
+          <label><input type="radio" name="c4" value="0"> 完全不管，反正会自己消失</label>
+          <label><input type="radio" name="c4" value="20"> 遵医嘱，正规医院评估与护理</label>
+        </div>
+        <div class="ex">疤痕多为永久性，但可通过正规医疗护理改善外观。许多偏方不仅无效，还可能造成二次损伤。</div>
+      </div>
+      <div class="cq" id="cq5">
+        <span class="num">5</span><p class="t">你的同事带疤痕，最好的支持方式是？</p>
+        <div class="opts">
+          <label><input type="radio" name="c5" value="0"> 时时提醒他注意形象</label>
+          <label><input type="radio" name="c5" value="20"> 平常心对待，需要时提供帮助</label>
+          <label><input type="radio" name="c5" value="0"> 替他解释疤痕来历，减轻尴尬</label>
+        </div>
+        <div class="ex">陪伴而不越界，支持而不怜悯。你的接纳与平常心，就是最温暖的礼物。</div>
+      </div>
+      <div class="chal-actions">
+        <button type="submit" class="btn">提交答案</button>
+        <button type="button" class="btn ghost" onclick="resetChal()">重新作答</button>
+      </div>
+    </form>
+    <div class="score-box" id="scoreBox">
+      <div class="sc" id="scoreNum">0</div>
+      <p id="scoreTxt"></p>
+    </div>
+    <a class="back-link" href="03-mindset.html">← 返回认知破局</a>
+  </div>
+</main>
+
+<!-- 页脚 -->
+<footer>
+  <div class="foot-inner">
+    <div class="foot-nav"><a class="p-btn" href="03-mindset.html">← 上一页 · 认知破局</a></div>
+        <div class="sitemap">
+      <a href="01-cover.html">1 主页封面</a>
+      <a href="01-cover.html#about">2 了解我们</a>
+      <a href="01-cover.html#videos">3 作品视频</a>
+      <a class="on" href="03-mindset.html">4 认知破局</a>
+      <a href="04-guide.html">5 生存指南</a>
+      <a href="05-museum.html">6 愈见心声馆</a>
+      <a href="06-community.html">7 互助空间站</a>
+      <a href="07-charity.html">8 公益行动</a>
+      <a href="08-career.html">9 职路护航</a>
+      <a href="01-cover.html#contact">10 联系我们</a>
+      <a href="16-space.html">我的空间</a>
+    </div>
+    <p class="copyright">《印痕》数字编辑创新大赛参赛作品 · 温柔治愈 · 关爱与帮助</p>
+    <p class="copyright" style="font-size:11px;opacity:.6;">版本 v6.1 · 2026-10-07</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+<div class="lm" id="loginModal">
+  <div class="lm-box">
+    <button class="lm-close" onclick="closeLogin()">×</button>
+    <div class="lm-tabs">
+      <div class="lm-tab active" id="tabLogin" onclick="switchTab('login')">手机号登录</div>
+      <div class="lm-tab" id="tabReg" onclick="switchTab('reg')">注册新账号</div>
+    </div>
+    <div id="paneLogin">
+      <div class="lm-field"><label>手机号</label><input type="tel" id="lgPhone" maxlength="11" placeholder="请输入11位手机号"></div>
+      <div class="lm-field"><label>密码</label><input type="password" id="lgPassword" maxlength="16" placeholder="请输入密码"></div>
+      <div class="lm-actions"><button class="btn" onclick="doLogin()">登录</button></div>
+    </div>
+    <div id="paneReg" style="display:none">
+      <div class="lm-field"><label>手机号</label><input type="tel" id="rgPhone" maxlength="11" placeholder="请输入11位手机号"></div>
+      <div class="lm-field"><label>昵称</label><input type="text" id="rgNick" maxlength="12" placeholder="给自己起个昵称"></div>
+      <div class="lm-field"><label>密码</label><input type="password" id="rgPassword" maxlength="16" placeholder="设置密码（至少4位）"></div>
+      <div class="lm-actions"><button class="btn" onclick="doRegister()">注册并登录</button></div>
+    </div>
+    <div class="lm-hint">测试账号：13800001111　密码：1234</div>
+  </div>
+</div>
+
+<script>
+/* 印痕 · 登录与数据系统（localStorage 持久化，按手机号隔离） */
+var USERS_KEY='yinhen_users', SESSION_KEY='yinhen_session';
+function allUsers(){try{return JSON.parse(localStorage.getItem(USERS_KEY))||{};}catch(e){return {};}}
+function saveUsers(u){localStorage.setItem(USERS_KEY,JSON.stringify(u));}
+function curUser(){return localStorage.getItem(SESSION_KEY)||'';}
+function setSession(p){localStorage.setItem(SESSION_KEY,p);}
+function curAccount(){var p=curUser();return p?allUsers()[p]:null;}
+function validPhone(p){return /^1\d{10}$/.test((p||'').trim());}
+function toast(msg){var t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show');},2200);}
+function openLogin(){document.getElementById('loginModal').classList.add('show');}
+function closeLogin(){document.getElementById('loginModal').classList.remove('show');}
+function switchTab(k){var isLogin=(k==='login');document.getElementById('tabLogin').classList.toggle('active',isLogin);document.getElementById('tabReg').classList.toggle('active',!isLogin);document.getElementById('paneLogin').style.display=isLogin?'block':'none';document.getElementById('paneReg').style.display=isLogin?'none':'block';}
+function getCode(kind){var p=document.getElementById(kind+'Phone').value.trim();if(!validPhone(p)){toast('请输入 1 开头的 11 位手机号');return;}toast('验证码已发送（演示模拟）');}
+var _afterLogin=null;
+function requireLogin(cb){
+  if(curUser()){if(cb)cb();return true;}
+  toast('您尚未登录，请先登录，登录后才可发布帖子');
+  _afterLogin=cb||null;
+  setTimeout(function(){openLogin();},400);
+  return false;
+}
+function doLogin(){var p=document.getElementById('lgPhone').value.trim();if(!validPhone(p)){toast('请输入 1 开头的 11 位手机号');return;}var u=allUsers();if(!u[p]){toast('该手机号未注册，请先注册');return;}var pw=document.getElementById('lgPassword').value.trim();if(!pw){toast('请输入密码');return;}if((u[p].password||'1234')!==pw){toast('密码错误，请重新输入');return;}setSession(p);closeLogin();refreshNav();var f=_afterLogin;_afterLogin=null;if(f)f();toast('欢迎回来，'+(u[p].nick||'朋友')+'');}
+function doRegister(){var p=document.getElementById('rgPhone').value.trim();var n=document.getElementById('rgNick').value.trim();var pw=document.getElementById('rgPassword').value.trim();if(!validPhone(p)){toast('请输入 1 开头的 11 位手机号');return;}if(!n){toast('请输入昵称');return;}if(!pw||pw.length<4){toast('密码至少 4 位');return;}var u=allUsers();if(u[p]){toast('该手机号已注册，请直接登录');return;}u[p]={nick:n,password:pw,sig:'',works:[],received:[],medalFlags:{firstWork:false,fiveLikes:false},medals:[],created:Date.now()};saveUsers(u);setSession(p);closeLogin();refreshNav();var f=_afterLogin;_afterLogin=null;if(f)f();toast('注册成功，欢迎加入印痕！');}
+function logout(){localStorage.removeItem(SESSION_KEY);refreshNav();toast('已退出登录');}
+/* 右上角用户入口（HTML 级兜底绑定）：已登录 → 我的空间；未登录 → 提示并弹出登录 */
+function navUserTap(e){
+  if(e&&e.target&&e.target.closest&&e.target.closest('#logoutBtn'))return;
+  if(curUser()){window.location.href='16-space.html';}
+  else{toast('请先登录');setTimeout(function(){openLogin();},350);}
+}
+function refreshNav(){var u=curUser(),acc=curAccount(),nn=document.getElementById('navNick'),na=document.getElementById('navAvatar'),lb=document.getElementById('logoutBtn');if(!nn||!na)return;if(u&&acc){nn.textContent=acc.nick;na.textContent=acc.nick.charAt(0);if(lb)lb.style.display='inline-block';}else{nn.textContent='未登录';na.textContent='登';if(lb)lb.style.display='none';}}
+function grantMedal(phone,name){var u=allUsers(),acc=u[phone];if(!acc||acc.medals.indexOf(name)>-1)return;acc.medals.push(name);if(name==='初次发声')acc.medalFlags.firstWork=true;if(name==='人气伙伴')acc.medalFlags.fiveLikes=true;saveUsers(u);toast('恭喜解锁奖章「'+name+'」！');}
+function addWork(phone,text,tags){var u=allUsers(),acc=u[phone];if(!acc)return;var w={id:'w'+Date.now(),time:new Date().getTime(),text:text,tags:tags||[],likes:0};acc.works.unshift(w);saveUsers(u);if(!acc.medalFlags.firstWork)grantMedal(phone,'初次发声');return w;}
+/* 挑战逻辑 */
+function checkAnswer(name){
+  var el=document.querySelector('input[name="'+name+'"]:checked');
+  return el?parseInt(el.value,10):-1;
+}
+var chalForm=document.getElementById('chalForm');
+if(chalForm)chalForm.addEventListener('submit',function(e){
+  e.preventDefault();
+  var score=0,answered=0;
+  for(var i=1;i<=5;i++){
+    var v=checkAnswer('c'+i);
+    if(v<0)continue;
+    answered++;score+=v;
+    var cq=document.getElementById('cq'+i);
+    cq.classList.remove('correct','wrong');
+    cq.classList.add(v>0?'correct':'wrong');
+    var ex=cq.querySelector('.ex');if(ex)ex.classList.add('show');
+  }
+  if(answered<5){toast('还有题目未作答，请完成全部 5 题');return;}
+  var box=document.getElementById('scoreBox');
+  document.getElementById('scoreNum').textContent=score+' 分';
+  var txt='';
+  if(score===100)txt='满分！你已经是一位「无痕偏见」的践行者。把这些认知带给身边的人吧。';
+  else if(score>=80)txt='很棒！你对烧伤疤痕的认知相当扎实，只差一点点就满分了。';
+  else if(score>=60)txt='不错！你掌握了大半正确认知，再看看解析补全剩下的部分。';
+  else txt='认知还有提升空间。别急，看完每题的解析，你会离理解更近一步。';
+  document.getElementById('scoreTxt').textContent=txt;
+  box.classList.add('show');
+});
+function resetChal(){
+  chalForm.reset();
+  for(var i=1;i<=5;i++){
+    var cq=document.getElementById('cq'+i);
+    cq.classList.remove('correct','wrong');
+    var ex=cq.querySelector('.ex');if(ex)ex.classList.remove('show');
+  }
+  document.getElementById('scoreBox').classList.remove('show');
+}
+(function(){var nu=document.getElementById('navUser');if(nu){nu.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('#logoutBtn'))return;if(curUser()){window.location.href='16-space.html';}else{toast('请先登录');setTimeout(function(){openLogin();},400);}});}var lb=document.getElementById('logoutBtn');if(lb){lb.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();logout();});}refreshNav();})();
+document.getElementById('loginModal').addEventListener('click',function(e){if(e.target===this)closeLogin();});
+</script>
+</body>
+</html>
